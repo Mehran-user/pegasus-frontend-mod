@@ -56,12 +56,43 @@ void rewrite_gamedircfg(const std::function<void(QTextStream&)>& callback)
     Log::info(LOGMSG("Game directory list saved"));
 }
 
+class MouseBlocker : public QObject {
+public:
+    using QObject::QObject;
+    bool eventFilter(QObject*, QEvent* e) override {
+        switch (e->type()) {
+            case QEvent::MouseButtonPress:
+            case QEvent::MouseButtonRelease:
+            case QEvent::MouseButtonDblClick:
+            case QEvent::MouseMove:
+            case QEvent::HoverMove:
+            case QEvent::HoverEnter:
+            case QEvent::HoverLeave:
+                return true;
+            default:
+                return false;
+        }
+    }
+};
+
+MouseBlocker* s_mouse_blocker = nullptr;
+
 void change_mouse_support(bool enabled)
 {
-    if (enabled)
+    if (enabled) {
         QGuiApplication::restoreOverrideCursor();
-    else
+        if (s_mouse_blocker) {
+            QGuiApplication::instance()->removeEventFilter(s_mouse_blocker);
+            delete s_mouse_blocker;
+            s_mouse_blocker = nullptr;
+        }
+    } else {
         QGuiApplication::setOverrideCursor(QCursor(Qt::BlankCursor));
+        if (!s_mouse_blocker) {
+            s_mouse_blocker = new MouseBlocker(QGuiApplication::instance());
+            QGuiApplication::instance()->installEventFilter(s_mouse_blocker);
+        }
+    }
 }
 
 } // namespace
@@ -124,6 +155,52 @@ void Settings::setShowMissingGames(bool new_val)
     AppSettings::save_config();
 
     emit showMissingGamesChanged();
+}
+
+void Settings::setSplashLogo(const QString& new_val)
+{
+    if (new_val == AppSettings::general.splash_logo)
+        return;
+
+    AppSettings::general.splash_logo = new_val;
+    AppSettings::save_config();
+
+    emit splashLogoChanged();
+}
+
+void Settings::setNetworkTime(bool new_val)
+{
+    if (new_val == AppSettings::general.network_time)
+        return;
+
+    AppSettings::general.network_time = new_val;
+    AppSettings::save_config();
+
+    m_timezones.applyNtp(new_val);
+
+    emit networkTimeChanged();
+}
+
+void Settings::setUse24hrClock(bool new_val)
+{
+    if (new_val == AppSettings::general.use_24hr_clock)
+        return;
+
+    AppSettings::general.use_24hr_clock = new_val;
+    AppSettings::save_config();
+
+    emit use24hrClockChanged();
+}
+
+void Settings::setShowSeconds(bool new_val)
+{
+    if (new_val == AppSettings::general.show_seconds)
+        return;
+
+    AppSettings::general.show_seconds = new_val;
+    AppSettings::save_config();
+
+    emit showSecondsChanged();
 }
 
 QStringList Settings::gameDirs() const

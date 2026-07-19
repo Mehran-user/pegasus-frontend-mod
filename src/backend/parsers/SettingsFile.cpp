@@ -72,6 +72,11 @@ ConfigEntryMaps::ConfigEntryMaps()
         { QStringLiteral("show-missing-games"), GeneralOption::SHOW_MISSING_GAMES },
         { QStringLiteral("locale"), GeneralOption::LOCALE },
         { QStringLiteral("theme"), GeneralOption::THEME },
+        { QStringLiteral("splash-logo"), GeneralOption::SPLASH_LOGO },
+        { QStringLiteral("timezone"), GeneralOption::TIMEZONE },
+        { QStringLiteral("network-time"), GeneralOption::NETWORK_TIME },
+        { QStringLiteral("use-24hr-clock"), GeneralOption::USE_24HR_CLOCK },
+        { QStringLiteral("show-seconds"), GeneralOption::SHOW_SECONDS },
     }
     , str_to_key_opt {
         { QStringLiteral("accept"), KeyEvent::ACCEPT },
@@ -185,6 +190,27 @@ void LoadContext::handle_general_attrib(const size_t lineno, const QString& key,
             break;
         case ConfigEntryGeneralOption::THEME:
             AppSettings::general.theme = ::clean_abs_path(QFileInfo(paths::writableConfigDir(), val));
+            break;
+        case ConfigEntryGeneralOption::SPLASH_LOGO:
+            if (val.isEmpty())
+                AppSettings::general.splash_logo.clear();
+            else
+                AppSettings::general.splash_logo = ::clean_abs_path(QFileInfo(val));
+            break;
+        case ConfigEntryGeneralOption::TIMEZONE:
+            AppSettings::general.timezone = val;
+            break;
+        case ConfigEntryGeneralOption::NETWORK_TIME:
+            if (!store_bool_maybe(val, AppSettings::general.network_time))
+                log_needs_bool(lineno, key);
+            break;
+        case ConfigEntryGeneralOption::USE_24HR_CLOCK:
+            if (!store_bool_maybe(val, AppSettings::general.use_24hr_clock))
+                log_needs_bool(lineno, key);
+            break;
+        case ConfigEntryGeneralOption::SHOW_SECONDS:
+            if (!store_bool_maybe(val, AppSettings::general.show_seconds))
+                log_needs_bool(lineno, key);
             break;
     }
 }
@@ -315,6 +341,11 @@ void SaveContext::print_general(QTextStream& stream) const
         { GeneralOption::SHOW_MISSING_GAMES, AppSettings::general.show_missing_games ? STR_TRUE : STR_FALSE },
         { GeneralOption::LOCALE, AppSettings::general.locale },
         { GeneralOption::THEME, theme_path },
+        { GeneralOption::SPLASH_LOGO, AppSettings::general.splash_logo },
+        { GeneralOption::TIMEZONE, AppSettings::general.timezone },
+        { GeneralOption::NETWORK_TIME, AppSettings::general.network_time ? STR_TRUE : STR_FALSE },
+        { GeneralOption::USE_24HR_CLOCK, AppSettings::general.use_24hr_clock ? STR_TRUE : STR_FALSE },
+        { GeneralOption::SHOW_SECONDS, AppSettings::general.show_seconds ? STR_TRUE : STR_FALSE },
     };
 
     for (const auto& entry : option_values) {

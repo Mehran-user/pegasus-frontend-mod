@@ -32,7 +32,7 @@ Rectangle {
 
     Image {
         id: logo
-        source: "assets/logo.png"
+        source: Internal.settings.splashLogo ? "file://" + Internal.settings.splashLogo : "assets/logo.png"
         width: Math.min(parent.width, parent.height)
         fillMode: Image.PreserveAspectFit
         verticalAlignment: Image.AlignBottom

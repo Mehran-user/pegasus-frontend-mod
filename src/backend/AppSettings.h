@@ -45,6 +45,11 @@ struct General {
     bool show_missing_games = false;
     QString locale;
     QString theme;
+    QString splash_logo;
+    QString timezone;
+    bool network_time = true;
+    bool use_24hr_clock = true;
+    bool show_seconds = false;
 
     General();
     NO_COPY_NO_MOVE(General)

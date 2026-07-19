@@ -41,6 +41,11 @@ enum class ConfigEntryGeneralOption : unsigned char {
     SHOW_MISSING_GAMES,
     LOCALE,
     THEME,
+    SPLASH_LOGO,
+    TIMEZONE,
+    NETWORK_TIME,
+    USE_24HR_CLOCK,
+    SHOW_SECONDS,
 };
 
 struct ConfigEntryMaps {

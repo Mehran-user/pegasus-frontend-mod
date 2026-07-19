@@ -49,9 +49,13 @@ FocusScope {
         onClose: root.close()
         onOpenKeySettings: root.openScreen("KeyEditor.qml")
         onOpenGamepadSettings: root.openScreen("GamepadEditor.qml")
-        onOpenGameDirSettings: root.openModal("GameDirEditor.qml")
+        onOpenGameDirSettings: root.openModal("gamedireditor/GameDirEditor.qml")
         onOpenAndroidSafSettings: root.openModal("AndroidSafEditor.qml")
         onOpenProviderSettings: root.openModal("ProviderEditor.qml")
+        onOpenSplashLogoSettings: root.openModal("gamedireditor/SplashLogoPicker.qml")
+        onOpenNetworkEditor: root.openScreen("NetworkEditor.qml")
+        onOpenBluetoothEditor: root.openScreen("BluetoothEditor.qml")
+        onOpenSSHEditor: root.openScreen("SSHEditor.qml")
         onReloadRequested: Internal.settings.reloadProviders()
     }
 
@@ -63,12 +67,19 @@ FocusScope {
         anchors.fill: parent
 
         enabled: focus
-        onLoaded: item.focus = focus
+        onLoaded: {
+            item.focus = focus;
+            if (typeof item.cancel !== "undefined")
+                item.cancel.connect(function() { modal.source = ""; main.focus = true; root.state = ""; });
+            if (typeof item.pick !== "undefined")
+                item.pick.connect(function(path) { Internal.settings.splashLogo = path; modal.source = ""; main.focus = true; root.state = ""; });
+        }
         onFocusChanged: if (item) item.focus = focus
     }
     Connections {
         target: modal.item
         function onClose() {
+            modal.source = "";
             main.focus = true;
             root.state = "";
         }
@@ -84,7 +95,11 @@ FocusScope {
         anchors.left: main.right
 
         enabled: focus
-        onLoaded: item.focus = focus
+        onLoaded: {
+            item.focus = focus;
+            if (typeof item.openKeyEditor !== "undefined")
+                item.openKeyEditor.connect(function() { root.openModal("SSHKeyEditor.qml"); });
+        }
         onFocusChanged: if (item) item.focus = focus
     }
     Connections {
