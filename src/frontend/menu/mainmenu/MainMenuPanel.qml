@@ -86,6 +86,9 @@ FocusScope {
             }
             selected: focus
 
+            enabled: Internal.meta.allowDisconnect
+            visible: enabled
+
             KeyNavigation.down: mbQuickExit.callable ? mbQuickExit : scopeQuit
         }
         PrimaryMenuItem {

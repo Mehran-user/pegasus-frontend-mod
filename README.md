@@ -44,6 +44,7 @@ This fork adds a built-in settings screen with the following tabs:
 - **Custom onscreen keyboard** with QWERTY and symbols modes, full gamepad navigation (D-pad, A, B, Enter, Cancel), and password dot masking
 - **Gamepad navigation** throughout all settings screens
 - **Disconnect Controllers** from the main menu (disconnects all Bluetooth controllers; wired controllers unaffected)
+- **Kiosk mode** (`--kiosk`) and individual `--disable-menu-*` flags to hide menu entries
 - **Bluetooth backend** using `bluetoothctl`
 - **SSH backend** using `ssh-keygen`, `pgrep`, and `sudo -A` with askpass helper
 - **Display management** supporting both X11 (`xrandr`) and Wayland (`wlr-randr`/`gnome-randr`)
