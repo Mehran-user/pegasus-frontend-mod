@@ -34,6 +34,7 @@ public:
     Q_INVOKABLE void connectDevice(const QString& mac);
     Q_INVOKABLE void disconnectDevice(const QString& mac);
     Q_INVOKABLE void removeDevice(const QString& mac);
+    Q_INVOKABLE void disconnectAll();
 
     Q_INVOKABLE int deviceCount() const { return m_devices.size(); }
     Q_INVOKABLE QString deviceName(int index) const;

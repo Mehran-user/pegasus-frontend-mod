@@ -180,6 +180,17 @@ void BluetoothSettings::removeDevice(const QString& mac)
     QTimer::singleShot(1000, this, &BluetoothSettings::parseDevices);
 }
 
+void BluetoothSettings::disconnectAll()
+{
+    for (const auto& dev : m_devices) {
+        if (dev.connected) {
+            Log::info(LOGMSG("Disconnecting `%1`").arg(dev.mac));
+            run_cmd(QStringLiteral("bluetoothctl"), {QStringLiteral("disconnect"), dev.mac});
+        }
+    }
+    QTimer::singleShot(1000, this, &BluetoothSettings::parseDevices);
+}
+
 QString BluetoothSettings::deviceName(int index) const
 {
     if (index >= 0 && index < static_cast<int>(m_devices.size()))

@@ -22,14 +22,14 @@ import QtQuick 2.8
 FocusScope {
     id: root
 
-    width: vpx(350)
+    width: vpx(500)
     height: parent.height
     visible: x < parent.width && 0 < x + width
     enabled: focus
 
     signal close
     signal showSettingsScreen
-    signal showHelpScreen
+    signal disconnectControllers
 
     signal requestShutdown
     signal requestSuspend
@@ -75,14 +75,14 @@ FocusScope {
             enabled: Internal.meta.allowSettings
             visible: enabled
 
-            KeyNavigation.down: mbHelp
+            KeyNavigation.down: mbDisconnect
         }
         PrimaryMenuItem {
-            id: mbHelp
-            text: qsTr("Help") + api.tr
+            id: mbDisconnect
+            text: qsTr("Disconnect Controllers") + api.tr
             onActivated: {
                 focus = true;
-                root.showHelpScreen();
+                root.disconnectControllers();
             }
             selected: focus
 
@@ -122,7 +122,7 @@ FocusScope {
                     first_callable.focus = true;
                     scopeQuit.focus = true;
                 } else {
-                    mbHelp.focus = true;
+                    mbDisconnect.focus = true;
                 }
             }
 

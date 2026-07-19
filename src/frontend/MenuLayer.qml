@@ -84,7 +84,7 @@ FocusScope {
         focus: true
 
         onShowSettingsScreen: root.openScreen("menu/settings/SettingsScreen.qml")
-        onShowHelpScreen: root.openScreen("menu/help/HelpScreen.qml")
+        onDisconnectControllers: Internal.settings.bluetooth.disconnectAll()
 
         onClose: root.triggerClose()
         onRequestShutdown: root.requestShutdown()
