@@ -3,7 +3,7 @@
 
 # Pegasus Frontend (Modified)
 
-A fork of [Pegasus Frontend](https://github.com/mmatyas/pegasus-frontend) with added settings UI and system management features.
+A fork of [Pegasus Frontend](https://github.com/mmatyas/pegasus-frontend) with added settings UI and system management features. Coded by an AI assistant ([opencode](https://github.com/anomalyco/opencode)).
 
 [![GPLv3 license](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE.md)
 
